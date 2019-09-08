@@ -1,6 +1,6 @@
 <template>
 <div id="app">
-    <h1>This is my App!</h1>
+    <h1>Kill the monster to win!</h1>
     <section class="row">
         <div class="small-6 columns">
             <h1 class="text-center">YOU</h1>
@@ -112,7 +112,8 @@ export default {
           this.monsterAttacks();
       },
       giveUp: function () {
-          this.gameIsRunning = false;
+          this.gameIsRunning = false,
+          text: 'You give up. What a shame.'
       },
       monsterAttacks: function() {
           var damage = this.calculateDamage(5, 12);
