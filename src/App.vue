@@ -1,5 +1,6 @@
 <template>
 <div id="app">
+    <h1>This is my App!</h1>
     <section class="row">
         <div class="small-6 columns">
             <h1 class="text-center">YOU</h1>
