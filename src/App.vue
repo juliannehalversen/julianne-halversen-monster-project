@@ -1,44 +1,212 @@
 <template>
+  <v-app>
+    <v-app-bar app>
+      <v-toolbar-title class="headline text-uppercase">
+        <span>Vuetify</span>
+        <span class="font-weight-light">MATERIAL DESIGN</span>
+      </v-toolbar-title>
+      <v-spacer></v-spacer>
+      <v-btn
+        text
+        href="https://github.com/vuetifyjs/vuetify/releases/latest"
+        target="_blank"
+      >
+        <span class="mr-2">Funnest Game Ever!</span>
+      </v-btn>
+    </v-app-bar>
+
+    <v-content>
+      <template>
+
 <div id="app">
-    <h1>Kill the monster to win!</h1>
-    <section class="row">
+    
+    <div class="text-center">
+    <v-dialog
+      v-model="winDialog"
+      width="500"
+    >
+      <template v-slot:activator="{ on }">
+       <!-- <v-btn
+          color="red lighten-2"
+          dark
+          v-on="on"
+        >
+          Click Me
+        </v-btn> -->
+      </template>
+
+      <v-card>
+        <v-card-title
+          primary-title
+        >
+          Game Over
+        </v-card-title>
+
+        <v-card-text>
+          You won!
+        </v-card-text>
+
+        <v-divider></v-divider>
+
+        <v-card-actions>
+          <div class="flex-grow-1"></div>
+          <v-btn
+            color="primary"
+            text
+            @click="wonGameDialog"
+          >
+            Play Again?
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+  </div>
+
+  <div class="text-center">
+    <v-dialog
+      v-model="loseDialog"
+      width="500"
+    >
+      <template v-slot:activator="{ on }">
+       <!-- <v-btn
+          color="red lighten-2"
+          dark
+          v-on="on"
+        >
+          Click Me
+        </v-btn> -->
+      </template>
+
+      <v-card>
+        <v-card-title
+          primary-title
+        >
+          Game Over
+        </v-card-title>
+
+        <v-card-text>
+          You lost!
+        </v-card-text>
+
+        <v-divider></v-divider>
+
+        <v-card-actions>
+          <div class="flex-grow-1"></div>
+          <v-btn
+            color="primary"
+            text
+            @click="lostGameDialog"
+          >
+            Play Again?
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+    </div>
+
+<div class="text-center">
+    <v-dialog
+      v-model="giveUpDialog"
+      width="500"
+    >
+      <template v-slot:activator="{ on }">
+       <!-- <v-btn
+          color="red lighten-2"
+          dark
+          v-on="on"
+        >
+          Click Me
+        </v-btn> -->
+      </template>
+
+      <v-card>
+        <v-card-title
+          primary-title
+        >
+          Game Over
+        </v-card-title>
+
+        <v-card-text>
+          You give up, what a shame!
+        </v-card-text>
+
+        <v-divider></v-divider>
+
+        <v-card-actions>
+          <div class="flex-grow-1"></div>
+          <v-btn
+            color="primary"
+            text
+            @click="giveUpGameDialog"
+          >
+            Play Again?
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+  </div>
+
+    <h1 ref='heading'> {{ header }}</h1>
+    <section class="row" style="margin: 0 auto; margin-bottom: 50px;">
         <div class="small-6 columns">
             <h1 class="text-center">YOU</h1>
-            <div class="healthbar">
-                <div
-                        class="healthbar text-center"
-                        style="background-color: green; margin: 0; color: white;"
-                        :style="{width: playerHealth + '%'}">
-                    {{ playerHealth }}
-                </div>
-            </div>
+            <v-progress-linear
+                v-model="playerHealth"
+                striped
+                color="light-green darken-4"
+                height="35"
+                rounded
+                reactive
+            >
+                <template v-slot="{ value }">
+                    <strong>{{ playerHealth }}</strong>
+                </template>
+            </v-progress-linear>
         </div>
         <div class="small-6 columns">
             <h1 class="text-center">MONSTER</h1>
-            <div class="healthbar">
-                <div
-                        class="healthbar text-center"
-                        style="background-color: green; margin: 0; color: white;"
-                        :style="{width: monsterHealth + '%'}">
-                    {{ monsterHealth }}
-                </div>
-            </div>
+            <v-progress-linear
+                v-model="monsterHealth"
+                striped
+                color="deep-orange darken-2"
+                height="35"
+                rounded
+                reactive
+            >
+                <template v-slot="{ value }">
+                    <strong>{{ monsterHealth }}</strong>
+                </template>
+            </v-progress-linear>
         </div>
     </section>
     <section class="row controls" v-if="!gameIsRunning">
         <div class="small-12 columns">
-            <button id="start-game" @click="startGame">START NEW GAME</button>
+            <button id="start-game" @click="startGame" style="border-radius: 15px;">START NEW GAME</button>
         </div>
     </section>
     <section class="row controls" v-else>
         <div class="small-12 columns">
-            <button id="attack" @click="attack">ATTACK</button>
-            <button id="special-attack" @click="specialAttack">SPECIAL ATTACK</button>
-            <button id="heal" @click="heal">HEAL</button>
-            <button id="give-up" @click="giveUp">GIVE UP</button>
+            <button id="attack" @click="attack" ref='attackButton' style="border-radius: 15px;">ATTACK</button>
+            <button id="special-attack" @click="specialAttack" ref='specialAttackButton' style="border-radius: 15px;">SPECIAL ATTACK</button>
+            <button id="heal" @click="heal" ref='healButton' style="border-radius: 15px;">HEAL</button>
+            <button id="specialHeal" @click="specialHeal" style="border-radius: 15px;">SPECIAL HEAL</button>
+            <v-btn id="give-up" @click="giveUp" style="border-radius: 15px;">GIVE UP</v-btn>
         </div>
     </section>
     <section class="row log" v-if="turns.length > 0">
+            <v-card
+    class="mx-auto"
+    width="900"
+    tile
+  >
+        <v-list-item>
+            <v-list-item-content>
+            <v-list-item-title v-for="turn in turns" 
+                    :class="{'player-turn': turn.isPlayer, 'monster-turn': !turn.isPlayer}">{{ turn.text }}</v-list-item-title>
+                </v-list-item-content>
+            </v-list-item>
+        </v-card>
+        <!-- ORIGINAL LIST
         <div class="small-12 columns">
             <ul>
                 <li v-for="turn in turns"
@@ -46,24 +214,32 @@
                     {{ turn.text }}
                 </li>
             </ul>
-        </div>
+        </div> -->
     </section>
+
 </div>
+</template>
+    </v-content>
+  </v-app>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import HelloWorld from './components/HelloWorld';
 
 export default {
-  name: 'app',
+  name: 'App',
   components: {
-    HelloWorld
+    HelloWorld,
   },
   data:  function () {
     return {
     playerHealth: 100,
     monsterHealth: 100,
     gameIsRunning: false,
+    header: 'Kill the monster to win!',
+    winDialog: false,
+    loseDialog: false,
+    giveUpDialog: false,
     turns: []
     }
   },
@@ -74,12 +250,35 @@ export default {
           this.monsterHealth = 100;
           this.turns = [];
       },
+      wonGameDialog: function () {
+          this.gameIsRunning = true;
+          this.playerHealth = 100;
+          this.monsterHealth = 100;
+          this.turns = [];
+          this.winDialog = false;
+      },
+      lostGameDialog: function () {
+          this.gameIsRunning = true;
+          this.playerHealth = 100;
+          this.monsterHealth = 100;
+          this.turns = [];
+          this.loseDialog = false;
+      },
+      giveUpGameDialog: function () {
+          this.gameIsRunning = true;
+          this.playerHealth = 100;
+          this.monsterHealth = 100;
+          this.turns = [];
+          this.giveUpDialog = false;  
+      },
       attack: function () {
+          this.$refs.attackButton.innerText = 'Keep attacking to kill the monster!';
+          this.$refs.heading.innerText = 'Keep Fighting!';
           var damage = this.calculateDamage(3, 10);
           this.monsterHealth -= damage;
           this.turns.unshift({
               isPlayer: true,
-              text: 'Player hits Monster for ' + damage
+              text: 'Player attacks Monster for ' + damage
           });
           if (this.checkWin()) {
               return;
@@ -88,11 +287,12 @@ export default {
           this.monsterAttacks();
       },
       specialAttack: function () {
+          this.$refs.specialAttackButton.innerText = 'Special attack again!';
           var damage = this.calculateDamage(10, 20);
           this.monsterHealth -= damage;
           this.turns.unshift({
               isPlayer: true,
-              text: 'Player hits Monster hard for ' + damage
+              text: 'Player special attacks Monster hard for ' + damage
           });
           if (this.checkWin()) {
               return;
@@ -100,6 +300,7 @@ export default {
           this.monsterAttacks();
       },
       heal: function () {
+          this.$refs.healButton.innerText = 'Keep healing!';
           if (this.playerHealth <= 90) {
               this.playerHealth += 10;
           } else {
@@ -111,9 +312,20 @@ export default {
           });
           this.monsterAttacks();
       },
+      specialHeal: function () {
+          if (this.playerHealth <= 90) {
+              this.playerHealth += 20;
+          } else {
+              this.playerHealth = 100;
+          }
+          this.turns.unshift({
+              isPlayer: true,
+              text: 'Player special heals for 20'
+          });
+          this.monsterAttacks();
+      },
       giveUp: function () {
-          this.gameIsRunning = false,
-          text: 'You give up. What a shame.'
+          this.giveUpDialog = true;
       },
       monsterAttacks: function() {
           var damage = this.calculateDamage(5, 12);
@@ -129,25 +341,18 @@ export default {
       },
       checkWin: function() {
           if (this.monsterHealth <= 0) {
-              if (confirm('You won! New Game?')) {
-                  this.startGame();
-              } else {
-                  this.gameIsRunning = false;
-              }
-              return true;
+              this.winDialog = true;
           } else if (this.playerHealth <= 0) {
-              if (confirm('You lost! New Game?')) {
-                  this.startGame();
-              } else {
-                  this.gameIsRunning = false;
-              }
-              return true;
+              this.loseDialog = true;
           }
-          return false;
-      }
+      },
   }
-}
+};
+
 </script>
+
+
+
 
 <style>
 #app {
@@ -155,20 +360,12 @@ export default {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
+  color: white;
   margin-top: 60px;
 }
 
 .text-center {
     text-align: center;
-}
-
-.healthbar {
-    width: 80%;
-    height: 40px;
-    background-color: #eee;
-    margin: auto;
-    transition: width 500ms;
 }
 
 .controls, .log {
@@ -177,6 +374,7 @@ export default {
     padding: 10px;
     border: 1px solid #ccc;
     box-shadow: 0px 3px 6px #ccc;
+    margin: 0 auto;
 }
 
 .turn {
@@ -215,39 +413,49 @@ button {
 }
 
 #start-game {
-    background-color: #aaffb0;
+    background-color: white;
+    color: black;
 }
 
 #start-game:hover {
-    background-color: #76ff7e;
+    background-color: black;
+    color: white;
 }
 
 #attack {
-    background-color: #ff7367;
-}
-
-#attack:hover {
     background-color: #ff3f43;
 }
 
-#special-attack {
-    background-color: #ffaf4f;
+#attack:hover {
+    background-color: #a10003;
 }
 
-#special-attack:hover {
+#special-attack {
     background-color: #ff9a2b;
 }
 
+#special-attack:hover {
+    background-color: #a15400;
+}
+
 #heal {
-    background-color: #aaffb0;
+    background-color: #00b10a;
 }
 
 #heal:hover {
-    background-color: #76ff7e;
+    background-color: #008a08;
+}
+#specialHeal {
+    background-color: #ce00ce;
+}
+
+#specialHeal:hover {
+    background-color: #800080;
 }
 
 #give-up {
     background-color: #ffffff;
+    color: black;
 }
 
 #give-up:hover {
