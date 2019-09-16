@@ -1,15 +1,15 @@
 # julianne-halversen-monster-project
 
-<!--  
-CHANGES MADE:
-1. Added Vuetify dialogs for winning, losing, and giving up
-2. Changed $ref inner txt button for attack, special attack, heal. Also changed $ref for existing vue element (header)
-3. Added Vuetify list component
-4. Added Vuetify button component for give up
-5. Added special heal button
-6. Custom Vuetify progress bars for health bars (monster and player)
-7. Added Vuetify dark theme, along with various styling
--->
+ 
+### CHANGES MADE:
+### 1. Added Vuetify dialogs for winning, losing, and giving up
+### 2. Changed $ref inner txt button for attack, special attack, heal. Also changed $ref for existing vue element (header)
+### 3. Added Vuetify list component
+### 4. Added Vuetify button component for give up
+### 5. Added special heal button
+### 6. Custom Vuetify progress bars for health bars (monster and player)
+### 7. Added Vuetify dark theme, along with various styling
+
 ## Project setup
 ```
 yarn install
